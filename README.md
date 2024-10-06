@@ -1,4 +1,4 @@
-# Accessibility Parking Finder
+# Acessibility Parking Finder
 
 ## About The Project
 This project aims to improve accessibility parking for users with disabilities. Using AI and computer vision, we've developed a system that detects and tracks the availability of accessible parking spaces in real-time.
