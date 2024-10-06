@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Handicap Car Detection</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        /* Basic styling for navbar */
+        /* General Styles */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f9f9f9;
-
         }
 
+        /* Hide Scrollbar for Chrome, Safari, and Opera */
         body::-webkit-scrollbar {
-    display: none;  /* For Chrome, Safari, and Opera */
-}
+            display: none;
+        }
 
+        /* Navbar Styling */
         nav {
             background: rgba(255, 255, 255, 0.89);
             display: flex;
@@ -44,17 +46,17 @@
             text-decoration: none;
             font-size: 18px;
             margin-left: 20px;
-            background-color: rgba(255,166,0,1);
+            background-color: rgba(255, 166, 0, 1);
             padding: 10px 20px;
             border-radius: 5px;
+            transition: box-shadow 0.3s;
         }
 
-        .nav-right a:hover{
-
+        .nav-right a:hover {
             box-shadow: rgba(0, 0, 0, 0.3) 2px 2px;
-
         }
-        /* Split layout for input and output */
+
+        /* Split layout for input and output sections */
         .split-container {
             display: flex;
             padding: 20px;
@@ -62,7 +64,7 @@
 
         .input-section {
             flex: 1;
-            margin-right: 20px; /* Space between input and output */
+            margin-right: 20px;
         }
 
         .output-section {
@@ -84,11 +86,12 @@
 
         button {
             background-color: #0056a6;
-            color: black;
+            color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         button:hover {
@@ -99,44 +102,26 @@
             margin-top: 20px;
         }
 
-        /* Footer styling */
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-            position: fixed;
-            bottom: 0px;
-            width: 100%;
-        }
-
-        footer p {
-            margin: 0;
-            font-size: 14px;
-        }
-
-        #teammates{
+        /* Team Section Styling */
+        #teammates {
             display: flex;
-            flex-direction: row;
             flex-wrap: wrap;
-
         }
-
 
         .teammate {
             display: flex;
-            flex-wrap: wrap;
             align-items: center;
             padding: 10px;
-            width:600px;
-            margin: 10px 10px;
+            width: 600px;
+            margin: 10px;
             background-color: #fff;
             border-radius: 10px;
-        }
-        .teammate:hover{
-            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            transition: box-shadow 0.3s;
         }
 
+        .teammate:hover {
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
 
         .teammate img {
             width: 100px;
@@ -145,33 +130,44 @@
             margin-right: 10px;
         }
 
-        .teammate-info {
-            display: flex;
-            align-items: center;
-        }
-
         .teammate-details {
             flex: 1;
         }
+
+        /* Footer Styling */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+        }
     </style>
 </head>
+
 <body>
     <!-- Navbar -->
     <nav>
         <div class="logo">HandiParkHub</div>
         <div class="nav-right">
-            <a href="index.html">Product</a>
-            <a href="about.html">About Us</a>
+            <a href="/">Product</a>
+            <a href="about">About Us</a>
             <a href="#">Login</a>
         </div>
     </nav>
 
-    <!-- Splitting input and output -->
-
-        <div class="output-section">
-            <h2 style="padding: 10px;">Meet the Team</h2>
-            <div id="teammates"></div>
-        </div>
+    <!-- Team Section -->
+    <div class="output-section">
+        <h2 style="padding: 10px;">Meet the Team</h2>
+        <div id="teammates"></div>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -212,7 +208,7 @@
         ];
 
         // Map over the teammates array to create HTML elements
-        $(document).ready(function() {
+        $(document).ready(function () {
             const teammatesContainer = $('#teammates');
 
             teammates.forEach(teammate => {
@@ -234,7 +230,7 @@
         });
 
         // Handle form submission for file upload via AJAX
-        $('#upload-form').on('submit', function(e) {
+        $('#upload-form').on('submit', function (e) {
             e.preventDefault();
             var formData = new FormData(this);
 
@@ -244,18 +240,19 @@
                 data: formData,
                 contentType: false,
                 processData: false,
-                success: function(response) {
+                success: function (response) {
                     if (response.filename) {
                         // Show the video container and start the video feed
                         $('#video-container').show();
                         $('#video-feed').attr('src', '/video_feed/' + response.filename);
                     }
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     alert('File upload failed. Please try again.');
                 }
             });
         });
     </script>
 </body>
+
 </html>

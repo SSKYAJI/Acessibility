@@ -1,11 +1,11 @@
 import os
 import random
 import math
-from PIL import Image, ImageEnhance, ImageFilter, ImageOps
+from PIL import Image, ImageEnhance, ImageFilter
 
 # Define input and output directories
-input_dir = 'input'
-output_dir = 'output'
+input_dir = 'Input'
+output_dir = 'Output'
 
 # Ensure the output directory exists
 os.makedirs(output_dir, exist_ok=True)
@@ -98,11 +98,13 @@ def transform_image(image, image_name, output_dir):
 
 
 # Loop through all images in the input directory and apply transformations
+total = 0
 for filename in os.listdir(input_dir):
     if filename.endswith(('.png', '.jpg', '.jpeg')):  # Only process image files
+        total += 1
         image_path = os.path.join(input_dir, filename)
         with Image.open(image_path) as img:
             image_name = os.path.splitext(filename)[0]  # Get the base filename without extension
             transform_image(img, image_name, output_dir)
 
-print("Image transformation with drastic changes completed.")
+print(f"Completed {total} images.")

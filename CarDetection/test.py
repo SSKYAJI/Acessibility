@@ -7,7 +7,6 @@ model = torch.hub.load('ultralytics/yolov5', 'yolov5s')
 
 def process_image(img_path):
     # Measure the time taken for the process
-    print("---- STARTING ----")
     start_time = time.time()
 
     # Read the image
@@ -36,9 +35,7 @@ def process_image(img_path):
     return car_coordinates
 
 # Example usage
-img_path = 'car.jpeg'  # Replace with the path to your image
+img_path = 'Sample.png'  # Replace with the path to your image
 
-# Test the inference and timing
-car_coords = process_image(img_path)
-
-# You can call process_image() multiple times to test with different images
+# Test the inference
+process_image(img_path)

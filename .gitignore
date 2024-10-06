@@ -1,6 +1,0 @@
-
-venv/Lib/site-packages/torch/lib/dnnl.lib
-venv/Lib/site-packages/torch/lib/torch_cpu.dll
-venv/
-venv/Lib/site-packages/torch/lib/*.lib
-venv/Lib/site-packages/torch/lib/*.dll
