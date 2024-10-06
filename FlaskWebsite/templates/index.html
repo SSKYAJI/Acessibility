@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handicap Car Detection</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Basic styling for navbar */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            scroll-behavior: smooth;
+
+        }
+
+          body::-webkit-scrollbar {
+    display: none;  /* For Chrome, Safari, and Opera */
+}
+
+        nav {
+            background: rgba(255, 255, 255, 0.89);
+            display: flex;
+            position: sticky;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+
+        .logo {
+            font-size: 24px;
+            color: #ff9f00;
+            font-weight: bold;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-right a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            margin-left: 20px;
+            background-color: rgba(255,166,0,1);
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .nav-right a:hover{
+
+            box-shadow: rgba(0, 0, 0, 0.3) 2px 2px;
+
+        }
+
+        /* Split layout for input and output */
+        .split-container {
+            display: flex;
+            padding: 20px;
+            height: 80vh;
+        }
+
+        .input-section {
+            flex: 1;
+            margin-right: 20px;
+
+            /* Space between input and output */
+        }
+
+        .output-section {
+            flex: 1;
+        border-left: 4px dashed #333;
+             padding-left: 20px; /* Add some padding to avoid text touching the border *//* Width, style, and color of the border */
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: left;
+
+        }
+        .file-input-container {
+        position: relative;
+        margin-bottom: 20px;
+            width: 50%;
+
+
+    }
+
+    .custom-file-label {
+        display: block;
+        padding: 10px 20px;
+        background-color: #f0f0f0;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .custom-file-label:hover {
+        background-color: #ddd;
+    }
+
+    #fileInput {
+        opacity: 0;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .submit-button {
+        background-color: #0056a6;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+
+        transition: background-color 0.3s ease;
+    }
+
+    .submit-button:hover {
+        background-color: #003b75;
+    }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+        }
+
+        button {
+            background-color: #0056a6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #003b75;
+        }
+
+        #video-container {
+            margin-top: 20px;
+        }
+
+        /* Footer styling */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+            position: fixed;
+
+            bottom: 0;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        #fileName {
+    font-weight: bold;
+    color: #333; /* Default color */
+            padding: 8px;
+            border-radius: 5px;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">HandiParkHub</div>
+        <div class="nav-right">
+            <a href="index.html">Product</a>
+            <a href="about.html">About Us</a>
+            <a href="#">Login</a>
+        </div>
+    </nav>
+
+    <!-- Splitting input and output -->
+    <div class="split-container">
+        <div class="input-section">
+            <h1>Upload a Video to Detect Handicap Cars</h1>
+            <form id="upload-form" enctype="multipart/form-data" style="text-align: left;">
+                 <div class="file-input-container">
+                    <label for="fileInput" class="custom-file-label"><span id="fileName">No file chosen</span></label>
+                    <input type="file" name="file" id="fileInput" accept="video/*" required>
+                 </div>
+                <button type="submit" class="submit-button">Run Handicap Test</button>
+            </form>
+
+        </div>
+        <div class="output-section">
+            <h1>Video Playback</h1>
+            <div id="video-container" style="display: none;">
+                <img id="video-feed" height="500vw" src="">
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 ParkHub. All rights reserved.</p>
+    </footer>
+
+    <script>
+        $(document).ready(function() {
+            // Handle form submission for file upload via AJAX
+            $('#upload-form').on('submit', function(e) {
+                e.preventDefault();
+
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '/upload',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        if (response.filename) {
+                            // Show the video container and start the video feed
+                            $('#video-container').show();
+                            $('#video-feed').attr('src', '/video_feed/' + response.filename);
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('File upload failed. Please try again.');
+                    }
+                });
+            });
+        });
+       document.getElementById('fileInput').addEventListener('change', function() {
+    const fileName = this.files[0] ? this.files[0].name : 'No file chosen';
+    const fileNameElement = document.getElementById('fileName');
+    fileNameElement.textContent = fileName;
+
+    if (fileName !== 'No file chosen') {
+        fileNameElement.style.color = 'green';
+        // Change color to green when a file is selected
+    } else {
+        fileNameElement.style.color = '#333'; // Revert to default color when no file
+    }
+
+});
+
+    </script>
+</body>
+</html>

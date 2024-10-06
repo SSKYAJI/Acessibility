@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handicap Car Detection</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Basic styling for navbar */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+
+        }
+
+        body::-webkit-scrollbar {
+    display: none;  /* For Chrome, Safari, and Opera */
+}
+
+        nav {
+            background: rgba(255, 255, 255, 0.89);
+            display: flex;
+            position: sticky;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+        }
+
+        .logo {
+            font-size: 24px;
+            color: #ff9f00;
+            font-weight: bold;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-right a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            margin-left: 20px;
+            background-color: rgba(255,166,0,1);
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .nav-right a:hover{
+
+            box-shadow: rgba(0, 0, 0, 0.3) 2px 2px;
+
+        }
+        /* Split layout for input and output */
+        .split-container {
+            display: flex;
+            padding: 20px;
+        }
+
+        .input-section {
+            flex: 1;
+            margin-right: 20px; /* Space between input and output */
+        }
+
+        .output-section {
+            flex: 1;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: left;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+        }
+
+        button {
+            background-color: #0056a6;
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #003b75;
+        }
+
+        #video-container {
+            margin-top: 20px;
+        }
+
+        /* Footer styling */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            position: fixed;
+            bottom: 0px;
+            width: 100%;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        #teammates{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+
+        }
+
+
+        .teammate {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: 10px;
+            width:600px;
+            margin: 10px 10px;
+            background-color: #fff;
+            border-radius: 10px;
+        }
+        .teammate:hover{
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        }
+
+
+        .teammate img {
+            width: 100px;
+            height: auto;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .teammate-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .teammate-details {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">HandiParkHub</div>
+        <div class="nav-right">
+            <a href="index.html">Product</a>
+            <a href="about.html">About Us</a>
+            <a href="#">Login</a>
+        </div>
+    </nav>
+
+    <!-- Splitting input and output -->
+
+        <div class="output-section">
+            <h2 style="padding: 10px;">Meet the Team</h2>
+            <div id="teammates"></div>
+        </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 ParkHub. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Array of teammates' information
+        const teammates = [
+            {
+                name: "Judah Boyce",
+                school: "Cypress Community College California",
+                image: "https://via.placeholder.com/100",
+                study: "Computer Science",
+                funFact: "Loves Music and Making Memories"
+            },
+            {
+                name: "Bob Smith",
+                school: "Texas A&M University",
+                image: "https://via.placeholder.com/100",
+                study: "Mechanical Engineering",
+                funFact: "Enjoys playing the guitar."
+            },
+            {
+                name: "Charlie Brown",
+                school: "University of Houston",
+                image: "https://via.placeholder.com/100",
+                study: "Electrical Engineering",
+                funFact: "Avid chess player."
+            },
+            {
+                name: "Diana Prince",
+                school: "Rice University",
+                image: "https://via.placeholder.com/100",
+                study: "Biology",
+                funFact: "Likes to cook and experiment with new recipes."
+            }
+        ];
+
+        // Map over the teammates array to create HTML elements
+        $(document).ready(function() {
+            const teammatesContainer = $('#teammates');
+
+            teammates.forEach(teammate => {
+                const teammateElement = `
+                    <div class="teammate">
+                        <div class="teammate-info">
+                            <img src="${teammate.image}" alt="${teammate.name}">
+                            <div class="teammate-details">
+                                <h3>${teammate.name}</h3>
+                                <p><strong>School:</strong> ${teammate.school}</p>
+                                <p><strong>Study:</strong> ${teammate.study}</p>
+                                <p><strong>Fun Fact:</strong> ${teammate.funFact}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                teammatesContainer.append(teammateElement);
+            });
+        });
+
+        // Handle form submission for file upload via AJAX
+        $('#upload-form').on('submit', function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: '/upload',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    if (response.filename) {
+                        // Show the video container and start the video feed
+                        $('#video-container').show();
+                        $('#video-feed').attr('src', '/video_feed/' + response.filename);
+                    }
+                },
+                error: function(xhr) {
+                    alert('File upload failed. Please try again.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
